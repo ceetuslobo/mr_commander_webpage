@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MR Commander</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="text-center py-6">
+    <h1 class="text-4xl font-bold text-black">MR Commander</h1>
+  </header>
+
+  <!-- Main Section -->
+  <main class="flex-1 max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      <!-- Left Panel: Summary and Delete -->
+      <div class="space-y-6">
+        <!-- Summary Card -->
+        <div class="border rounded-lg p-6 shadow">
+          <h2 class="text-xl font-bold mb-4">Summary</h2>
+          <p>Total Meetings: 140</p>
+          <p class="text-orange-500 font-semibold">Flagged Events: 30</p>
+          <p>Healthy: 110</p>
+        </div>
+        <!-- Delete Button -->
+        <div class="space-y-2">
+          <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full">
+            Delete Flagged Events
+          </button>
+          <p class="text-xs text-center text-gray-500">Delete only after review</p>
+        </div>
+      </div>
+
+      <!-- Center Panel: Generate and Chart -->
+      <div class="flex flex-col items-center space-y-6">
+        <button id="generateBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg">
+          Generate Dry Run Report
+        </button>
+        <div id="progressContainer" class="w-full bg-gray-200 rounded-full h-2 hidden">
+          <div id="progressBar" class="bg-orange-500 h-2 rounded-full" style="width: 0%"></div>
+        </div>
+        <div class="w-[300px]">
+          <canvas id="pieChart" width="300" height="300"></canvas>
+        </div>
+      </div>
+
+      <!-- Right Panel: Recent Actions -->
+      <div class="space-y-6">
+        <div class="border rounded-lg p-6 shadow">
+          <h2 class="text-xl font-bold mb-4">Recent Actions</h2>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Dry Run Report generated (2025-04-27 14:30)</li>
+            <li>Flagged meetings deleted (2025-04-26 11:46)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- History Table -->
+    <div class="mt-10">
+      <h2 class="text-2xl font-bold mb-4">History</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-auto text-center border">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border px-4 py-2">Report Name</th>
+              <th class="border px-4 py-2">Date & Time</th>
+              <th class="border px-4 py-2">Download Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border px-4 py-2">DryRun_Report_1</td>
+              <td class="border px-4 py-2">2025-04-27 14:30</td>
+              <td class="border px-4 py-2"><a href="#" class="text-orange-500 underline">Download</a></td>
+            </tr>
+            <tr>
+              <td class="border px-4 py-2">DryRun_Report_2</td>
+              <td class="border px-4 py-2">2025-04-26 11:45</td>
+              <td class="border px-4 py-2"><a href="#" class="text-orange-500 underline">Download</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-gray-400 text-sm">
+    Powered by Sparrow IT
+  </footer>
+
+  <script>
+    const generateBtn = document.getElementById('generateBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+
+    generateBtn.addEventListener('click', () => {
+      progressContainer.classList.remove('hidden');
+      progressBar.style.width = '0%';
+      let width = 0;
+      const interval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(interval);
+          alert('Report Generated!');
+        } else {
+          width++;
+          progressBar.style.width = width + '%';
+        }
+      }, 30);
+    });
+
+    // Pie Chart
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Flagged Events', 'Other Events'],
+        datasets: [{
+          data: [30, 110],
+          backgroundColor: ['#f97316', '#4ade80']
+        }]
+      }
+    });
+  </script>
+
+</body>
+</html>
